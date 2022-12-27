@@ -18,6 +18,7 @@ class CardGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = CardGroup
         fields = ['id', 'title', 'description', 'owner', 'cards']
+        read_only_fields = ['id', 'owner']
 
     def create(self, validated_data):
         print("In create")
@@ -29,7 +30,6 @@ class CardGroupSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         request = self.context['request']
-
         cards_data = request.data.get('cards')
         cards_ids = json_deserialize(cards_data, expect_type=list)
         validated_data['cards'] = cards_ids
@@ -42,3 +42,4 @@ class CardlessGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = CardGroup
         fields = ['id', 'title', 'description', 'owner']
+

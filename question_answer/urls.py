@@ -5,11 +5,9 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register('api/cards', views.CardViewSet)
-router.register('api/groups', views.CardGroupViewSet)
+router.register('api/card-groups', views.CardGroupViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include(urls)),
-
-
 ]

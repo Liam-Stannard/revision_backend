@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from .models import CardGroup, Card
+from .permissions import IsOwner
 from .serializers import CardSerializer, CardGroupSerializer, CardlessGroupSerializer
 
 
@@ -13,6 +14,10 @@ class CardViewSet(viewsets.ModelViewSet):
     serializer_class = CardSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        filtered_queryset = self.queryset.filter(owner=self.request.user)
+        return filtered_queryset
+
 
 class CardGroupViewSet(viewsets.ModelViewSet):
     queryset = CardGroup.objects.all()
@@ -23,3 +28,7 @@ class CardGroupViewSet(viewsets.ModelViewSet):
         if self.action in ("create", "update", "partial_update"):
             return CardlessGroupSerializer
         return CardGroupSerializer
+
+    def get_queryset(self):
+        filtered_queryset = self.queryset.filter(owner=self.request.user)
+        return filtered_queryset
