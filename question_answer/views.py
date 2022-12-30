@@ -23,12 +23,13 @@ class CardGroupViewSet(viewsets.ModelViewSet):
     queryset = CardGroup.objects.all()
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        filtered_queryset = self.queryset.filter(owner=self.request.user)
+        return filtered_queryset
+
     def get_serializer_class(self):
         print(self.action)
         if self.action in ("create", "update", "partial_update"):
             return CardlessGroupSerializer
         return CardGroupSerializer
 
-    def get_queryset(self):
-        filtered_queryset = self.queryset.filter(owner=self.request.user)
-        return filtered_queryset

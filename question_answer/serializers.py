@@ -42,4 +42,5 @@ class CardlessGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = CardGroup
         fields = ['id', 'title', 'description', 'owner']
+        read_only_fields = ['id', 'owner']
 
