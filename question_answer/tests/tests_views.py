@@ -4,9 +4,9 @@ from rest_framework import status
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from django.urls import reverse
-from question_answer.models import CardGroup
-from question_answer.serializers import CardGroupSerializer
-from question_answer.views import CardGroupViewSet
+from question_answer.models import Collection
+from question_answer.serializers import CollectionSerializer
+from question_answer.views import CollectionViewSet
 
 
 class CardGroupViewSetTest(TestCase):
@@ -26,29 +26,29 @@ class CardGroupViewSetTest(TestCase):
         owner_2.set_password(owner_2_password)
         owner_2.save()
 
-        CardGroup.objects.create(title='Python Django Revision',
-                                 description='Python Django revision questions.',
-                                 owner=owner_1)
+        Collection.objects.create(title='Python Django Revision',
+                                  description='Python Django revision questions.',
+                                  owner=owner_1)
 
-        CardGroup.objects.create(title='Python Revision',
-                                 description='Python revision questions.',
-                                 owner=owner_2)
-        CardGroup.objects.create(title='AZ-900 Revision',
-                                 description='AZ-900 revision questions.',
-                                 owner=owner_2)
+        Collection.objects.create(title='Python Revision',
+                                  description='Python revision questions.',
+                                  owner=owner_2)
+        Collection.objects.create(title='AZ-900 Revision',
+                                  description='AZ-900 revision questions.',
+                                  owner=owner_2)
 
     def test_get_all_card_groups_for_user(self):
 
         factory = APIRequestFactory()
         user = User.objects.get(username='owner_1')
-        view = CardGroupViewSet.as_view({'get': 'list'})
+        view = CollectionViewSet.as_view({'get': 'list'})
 
         request = factory.get('/api/card-groups/')
         force_authenticate(request, user=user)
         response = view(request)
 
-        card_groups = CardGroup.objects.filter(owner=user)
-        serializer = CardGroupSerializer(card_groups, many=True)
+        card_groups = Collection.objects.filter(owner=user)
+        serializer = CollectionSerializer(card_groups, many=True)
 
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

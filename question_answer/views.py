@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from .models import CardGroup, Card
+from .models import Collection, Card
 from .permissions import IsOwner
-from .serializers import CardSerializer, CardGroupSerializer, CardlessGroupSerializer
+from .serializers import CardSerializer, CollectionSerializer, CardlessCollectionSerializer
 
 
 # Create your views here.
@@ -19,8 +19,8 @@ class CardViewSet(viewsets.ModelViewSet):
         return filtered_queryset
 
 
-class CardGroupViewSet(viewsets.ModelViewSet):
-    queryset = CardGroup.objects.all()
+class CollectionViewSet(viewsets.ModelViewSet):
+    queryset = Collection.objects.all()
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -30,6 +30,5 @@ class CardGroupViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         print(self.action)
         if self.action in ("create", "update", "partial_update"):
-            return CardlessGroupSerializer
-        return CardGroupSerializer
-
+            return CardlessCollectionSerializer
+        return CollectionSerializer

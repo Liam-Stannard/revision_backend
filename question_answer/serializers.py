@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .function import json_deserialize
-from .models import Card, CardGroup
+from .models import Card, Collection
 
 
 class CardSerializer(serializers.ModelSerializer):
@@ -12,21 +12,21 @@ class CardSerializer(serializers.ModelSerializer):
                   'answer_a', 'answer_b', 'answer_c', 'answer_d', 'owner')
 
 
-class CardGroupSerializer(serializers.ModelSerializer):
+class CollectionSerializer(serializers.ModelSerializer):
     cards = CardSerializer(read_only=True, many=True)
 
     class Meta:
-        model = CardGroup
+        model = Collection
         fields = ['id', 'title', 'description', 'owner', 'cards']
         read_only_fields = ['id', 'owner']
 
     def create(self, validated_data):
         print("In create")
         cards_data = validated_data.pop('cards')
-        group = CardGroup.objects.create(**validated_data)
+        collection = Collection.objects.create(**validated_data)
         for card_data in cards_data:
-            Card.objects.create(group=group, **card_data)
-        return group
+            Card.objects.create(group=collection, **card_data)
+        return collection
 
     def update(self, instance, validated_data):
         request = self.context['request']
@@ -38,9 +38,19 @@ class CardGroupSerializer(serializers.ModelSerializer):
         return instance
 
 
-class CardlessGroupSerializer(serializers.ModelSerializer):
+class CardlessCollectionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CardGroup
+        model = Collection
         fields = ['id', 'title', 'description', 'owner']
-        read_only_fields = ['id', 'owner']
+        read_only_fields = ['id']
 
+    def create(self, validated_data):
+        print("In create")
+        request = self.context['request']
+        print("---------------------------------------")
+        print(validated_data)
+        print(self.context)
+        print("---------------------------------------")
+        group = Collection.objects.create(**validated_data)
+        print("---------------------------------------")
+        return group

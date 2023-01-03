@@ -5,7 +5,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register('api/cards', views.CardViewSet)
-router.register('api/card-groups', views.CardGroupViewSet)
+router.register('api/collections', views.CollectionViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
