@@ -48,7 +48,9 @@ class CardlessCollectionSerializer(serializers.ModelSerializer):
         print("In create")
         request = self.context['request']
         print("---------------------------------------")
-        validated_data["owner"] = request.user
+        if request.user:
+            validated_data["owner"] = request.user
+
         collection = Collection.objects.create(**validated_data)
 
         print("---------------------------------------")
