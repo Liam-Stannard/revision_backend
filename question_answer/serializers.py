@@ -42,15 +42,14 @@ class CardlessCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = ['id', 'title', 'description', 'owner']
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'owner']
 
     def create(self, validated_data):
         print("In create")
         request = self.context['request']
         print("---------------------------------------")
-        print(validated_data)
-        print(self.context)
+        validated_data["owner"] = request.user
+        collection = Collection.objects.create(**validated_data)
+
         print("---------------------------------------")
-        group = Collection.objects.create(**validated_data)
-        print("---------------------------------------")
-        return group
+        return collection
