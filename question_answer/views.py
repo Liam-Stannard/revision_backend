@@ -15,7 +15,7 @@ class CardViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        filtered_queryset = self.queryset.filter(owner=self.request.user)
+        filtered_queryset = self.queryset.filter(user=self.request.user)
         return filtered_queryset
 
 
@@ -24,7 +24,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        filtered_queryset = self.queryset.filter(owner=self.request.user)
+        filtered_queryset = self.queryset.filter(user=self.request.user)
         return filtered_queryset
 
     def get_serializer_class(self):

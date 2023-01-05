@@ -4,7 +4,7 @@ from django.db import models
 class Collection(models.Model):
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
-    owner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='collections')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='collections')
 
     def __str__(self):
         return self.title
@@ -38,7 +38,7 @@ class Card(models.Model):
         related_name='cards',
     )
 
-    owner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='card')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='card')
 
     def __str__(self):
         return self.title

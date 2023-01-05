@@ -4,12 +4,12 @@ from .models import Card, Collection
 
 
 class CardSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
+    user = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = Card
         fields = ('id', 'title', 'question', 'correct_answer', 'group_id',
-                  'answer_a', 'answer_b', 'answer_c', 'answer_d', 'owner')
+                  'answer_a', 'answer_b', 'answer_c', 'answer_d', 'user')
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -17,8 +17,8 @@ class CollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Collection
-        fields = ['id', 'title', 'description', 'owner', 'cards']
-        read_only_fields = ['id', 'owner']
+        fields = ['id', 'title', 'description', 'user', 'cards']
+        read_only_fields = ['id', 'user']
 
     def create(self, validated_data):
         print("In create")
@@ -41,15 +41,15 @@ class CollectionSerializer(serializers.ModelSerializer):
 class CardlessCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
-        fields = ['id', 'title', 'description', 'owner']
-        read_only_fields = ['id', 'owner']
+        fields = ['id', 'title', 'description', 'user']
+        read_only_fields = ['id', 'user']
 
     def create(self, validated_data):
         print("In create")
         request = self.context['request']
         print("---------------------------------------")
         if request.user:
-            validated_data["owner"] = request.user
+            validated_data["user"] = request.user
 
         collection = Collection.objects.create(**validated_data)
 
