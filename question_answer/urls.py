@@ -4,7 +4,7 @@ from . import views
 
 
 router = routers.DefaultRouter()
-router.register('api/cards', views.CardViewSet)
+router.register('api/questions', views.QuestionViewSet)
 router.register('api/collections', views.CollectionViewSet)
 
 urlpatterns = [

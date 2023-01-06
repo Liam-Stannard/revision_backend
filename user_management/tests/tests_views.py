@@ -12,6 +12,9 @@ class UserAccessTest(BaseUserManagementTestCase):
         super().setUp()
 
     def test_get_access_token(self):
+        """
+        Test to ensure when the correct username/password is posted an access token is provided and 200 is returned.
+        """
         client = APIClient()
         user = self.user
         url = reverse('token_obtain_pair')
