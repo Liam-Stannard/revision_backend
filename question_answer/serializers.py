@@ -7,11 +7,11 @@ class QuestionSerializer(serializers.ModelSerializer):
     """
      A serializer for questions
     """
-    user = serializers.ReadOnlyField(source='user.username')
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault(), )
 
     class Meta:
         model = Question
-        fields = ('id', 'title', 'question', 'correct_answer', 'group_id',
+        fields = ('id', 'title', 'question', 'correct_answer', 'collection',
                   'answer_a', 'answer_b', 'answer_c', 'answer_d', 'user')
 
 
@@ -20,6 +20,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     A serializer for collections which includes cards in the post
     """
     questions = QuestionSerializer(read_only=True, many=True)
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault(), )
 
     class Meta:
         model = Collection
@@ -48,19 +49,13 @@ class QuestionlessCollectionSerializer(serializers.ModelSerializer):
     A serializer for collections which does not include cards in the post.
     This allows for collections to be created without cards
     """
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault(), )
+
     class Meta:
         model = Collection
         fields = ['id', 'title', 'description', 'user']
-        read_only_fields = ['id', 'user']
+        read_only_fields = ['id']
 
     def create(self, validated_data):
-        print("In create")
-        request = self.context['request']
-        print("---------------------------------------")
-        if request.user:
-            validated_data["user"] = request.user
-
         collection = Collection.objects.create(**validated_data)
-
-        print("---------------------------------------")
         return collection
